@@ -50,15 +50,20 @@ void ofApp::setup(){
 	_fbo.allocate(_size_image.x, _size_image.y, GL_RGBA);
 	_fbo.setAnchorPercent(_anchor.x, _anchor.y);
 	*/
+}
 
-	_directory.open("./");
-	vector<ofFile> t_dirs = _directory.getFiles();
+void ofApp::read_needed_files(){
+	ofDirectory directory;
+	_name_images.clear();
+
+	directory.open("./");
+	vector<ofFile> t_dirs = directory.getFiles();
 	for(auto& it : t_dirs){
 		if(!it.isDirectory())continue;
 
 		string dirs_name = "./" + it.getBaseName();
-		_directory.open(dirs_name);
-		for(auto& file : _directory.getFiles()){
+		directory.open(dirs_name);
+		for(auto& file : directory.getFiles()){
 			string name = file.getBaseName();
 			if(0 == name.compare("finish")){
 				_name_images.insert(pair<string, string>(dirs_name + "/", dirs_name + "/finish.png"));
@@ -84,6 +89,8 @@ void ofApp::draw(){
 	//--------------
 
 	if(_fbo.isAllocated()){
+		ofEnableAntiAliasing();
+		ofEnableAlphaBlending();
 		_fbo.begin();
 		ofClear(255, 255, 255, 0);
 
@@ -166,7 +173,10 @@ void ofApp::draw(){
 			new_size += new_size*PYZZ_D;
 
 			t_image.resize(new_size.x, new_size.y);
-			t_image.saveImage(new_file_name, OF_IMAGE_QUALITY_BEST);
+
+			ofFile::removeFile(new_file_name);
+			//if(_ids.y == 4.)
+				t_image.saveImage(new_file_name, OF_IMAGE_QUALITY_BEST);
 			//ofSaveImage(t_pixels, );
 
 			cout << "saves _ids.x = " << _ids.x << " _ids.y = " << _ids.y << endl;
@@ -209,6 +219,7 @@ void ofApp::keyReleased(int key){
 			break;
 		case 's':
 			cout << "start saving\n" << endl;
+			read_needed_files();
 			_ids.y = COUNT_L + 1;
 			_has_start_cuts = true;
 			break;

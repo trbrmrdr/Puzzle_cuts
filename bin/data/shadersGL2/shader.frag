@@ -210,7 +210,8 @@ void main() {
     vec2 n_st = ((id-1.)/(COUNT_L)) + d_x * (fract(st));
     
     vec4 tex_p = texture2DRect(tex0, n_st  *u_resolution);
-    tex_p = vec4(tex_p.rgb, 1.-length(color.rgb));
+    
+    tex_p = vec4(tex_p.rgb, 1. - length(color.rgb) >.0 ? 1.:.0 );
     
     gl_FragColor = tex_p;
 }

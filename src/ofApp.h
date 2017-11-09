@@ -26,6 +26,7 @@ public:
 	virtual void dragEvent(ofDragInfo dragInfo);
 	virtual void gotMessage(ofMessage msg);
 private:
+	void read_needed_files();
 	ofImage _image;
 	ofShader_check _shader;
 	ofFbo _fbo;
@@ -50,7 +51,6 @@ private:
 
 	ofVec2f _point;
 
-	ofDirectory _directory;
 	map<string, string> _name_images;
 	string _curr_dir;
 	bool _has_start_cuts;
